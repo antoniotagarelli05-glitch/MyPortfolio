@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antonio Tagarelli — Portfolio</title>
+
+  <!-- =====================================================
+       FONT: Inter da Google Fonts
+       ===================================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- =====================================================
+       STILI GLOBALI
+       Palette:
+         --bg:        #0F172A  (sfondo principale dark)
+         --bg-card:   #1E293B  (card su sfondo dark)
+         --bg-light:  #F1F5F9  (sezioni chiare alternate)
+         --accent:    #2563EB  (blu principale / titoli)
+         --hover:     #38BDF8  (azzurro hover/accent)
+         --text:      #FFFFFF  (testo principale)
+         --text-muted:#64748B  (testo secondario)
+         --border:    rgba(255,255,255,0.08)
+       ===================================================== -->
+  <style>
+    /* ── RESET & BASE ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0F172A;
+      --bg-card:    #1E293B;
+      --bg-light:   #F1F5F9;
+      --accent:     #2563EB;
+      --hover:      #38BDF8;
+      --text:       #FFFFFF;
+      --text-muted: #64748B;
+      --text-dark:  #1E293B;
+      --border:     rgba(255,255,255,0.08);
+      --radius:     16px;
+      --shadow:     0 4px 24px rgba(0,0,0,0.35);
+      --shadow-hover:0 12px 40px rgba(37,99,235,0.25);
+      --transition: 0.3s ease;
+      --max-w:      1100px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+    /* ── UTILITY ──────────────────────────────────────── */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section { padding: 96px 0; }
+
+    .section-light {
+      background: var(--bg-light);
+      color: var(--text-dark);
+    }
+    .section-light .section-label { color: var(--accent); }
+    .section-light .section-title { color: var(--text-dark); }
+    .section-light .section-sub   { color: #475569; }
+
+    /* Etichetta sopra il titolo sezione */
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--hover);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 560px;
+    }
+
+    .section-header { margin-bottom: 56px; }
+
+    /* Card generica */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    /* Card su sfondo chiaro */
+    .section-light .card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      color: var(--text-dark);
+    }
+
+    /* Badge pill */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(37,99,235,0.15);
+      color: var(--hover);
+      border: 1px solid rgba(56,189,248,0.2);
+    }
+
+    /* Grid helpers */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+
+    /* Animazione fade-in on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── NAVBAR ───────────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(15,23,42,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      padding: 0 24px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--hover); }
+
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+    }
+    .nav-links a {
+      display: block;
+      padding: 6px 14px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: color var(--transition), background var(--transition);
+    }
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* Hamburger mobile */
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+      background: none;
+      border: none;
+    }
+    .nav-burger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    /* Mobile nav overlay */
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      inset: 64px 0 0 0;
+      background: var(--bg);
+      z-index: 999;
+      padding: 32px 24px;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── HERO ─────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 64px;
+    }
+
+    /* Griglia di punti in background — firma visiva */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(37,99,235,0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(56,189,248,0.08) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    /* griglia di punti — elemento identitario */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 64px;
+      width: 100%;
+    }
+
+    .hero-text { flex: 1; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--hover);
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--hover);
+    }
+
+    .hero-name {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    /* Il cognome in blu — leggero rischio visivo giustificato */
+    .hero-name .surname { color: var(--accent); }
+
+    .hero-role {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .hero-bio {
+      font-size: 1rem;
+      color: #94A3B8;
+      max-width: 480px;
+      line-height: 1.75;
+      margin-bottom: 40px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 10px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+    .btn-primary:hover { background: #1D4ED8; transform: translateY(-2px); }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color var(--transition), color var(--transition), transform var(--transition);
+    }
+    .btn-outline:hover {
+      border-color: var(--hover);
+      color: var(--hover);
+      transform: translateY(-2px);
+    }
+
+    /* Foto hero dimensione spazio di inserimento foto */
+    .hero-photo {
+      flex-shrink: 0;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 3px solid rgba(37,99,235,0.4);
+      box-shadow: 0 0 0 8px rgba(37,99,235,0.08), var(--shadow);
+      position: relative;
+    }
+    .hero-photo-img {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /*Dimensioni foto inserita */
+    .hero-photo img {
+      width: auto;
+      height: 134%;
+      max-width: none;
+      object-fit: contain;
+      object-position: 50% 36%;
+      display: block;
+      margin: 0 auto;
+      background: transparent;
+    }
+    /* Placeholder quando non c'è foto */
+    .hero-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+    }
+
+    /* Stats hero */
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 44px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── CHI SONO ─────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 1rem;
+      color: #94A3B8;
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+
+    .about-info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .about-info-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+    }
+    .about-info-list .info-label {
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 80px;
+    }
+    .about-info-list .info-value {
+      color: var(--text);
+    }
+    .about-info-list a {
+      color: var(--hover);
+      text-decoration: none;
+    }
+    .about-info-list a:hover { text-decoration: underline; }
+
+    .about-langs {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    /* ── COMPETENZE ───────────────────────────────────── */
+    .skill-category {
+      margin-bottom: 8px;
+    }
+    .skill-cat-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--hover);
+      margin-bottom: 14px;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .skill-tag {
+      padding: 6px 14px;
+      background: rgba(37,99,235,0.12);
+      border: 1px solid rgba(37,99,235,0.2);
+      border-radius: 8px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: #CBD5E1;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .skill-tag:hover {
+      background: rgba(56,189,248,0.15);
+      border-color: var(--hover);
+      color: var(--hover);
+    }
+
+    /* ── TIMELINE (Esperienze / Formazione) ────────────── */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -28px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.3);
+    }
+
+    .timeline-date {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--hover);
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .timeline-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .timeline-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .timeline-desc {
+      font-size: 0.88rem;
+      color: #94A3B8;
+      line-height: 1.7;
+    }
+
+    .section-light .timeline::before { background: linear-gradient(to bottom, var(--accent), transparent); }
+    .section-light .timeline-item::before { border-color: var(--bg-light); }
+    .section-light .timeline-title { color: var(--text-dark); }
+    .section-light .timeline-desc  { color: #475569; }
+
+    /* ── CERTIFICAZIONI ───────────────────────────────── */
+    .cert-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: default;
+    }
+    .cert-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(37,99,235,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .cert-body {}
+    .cert-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .cert-name a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .cert-name a:hover,
+    .cert-name a:focus {
+      color: var(--hover);
+      text-decoration: underline;
+      outline: none;
+    }
+    .cert-issuer {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .cert-date {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--hover);
+    }
+
+    /* ── BADGE ────────────────────────────────────────── */
+    .badge-card {
+      text-align: center;
+      padding: 36px 20px;
+    }
+    .badge-img-wrap {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: rgba(37,99,235,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      border: 2px solid rgba(37,99,235,0.2);
+      overflow: hidden;
+    }
+    .badge-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .badge-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .badge-platform {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .badge-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--hover);
+      text-decoration: none;
+      border: 1px solid rgba(56,189,248,0.25);
+      border-radius: 8px;
+      padding: 6px 14px;
+      transition: background var(--transition);
+    }
+    .badge-link:hover { background: rgba(56,189,248,0.1); }
+
+    /* ── PASSIONI ─────────────────────────────────────── */
+    .passion-card .passion-emoji {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .passion-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-dark);
+    }
+    .passion-card p {
+      font-size: 0.88rem;
+      color: #475569;
+      line-height: 1.7;
+    }
+    .passion-card ul {
+      padding-left: 16px;
+      margin-top: 8px;
+    }
+    .passion-card ul li {
+      font-size: 0.88rem;
+      color: #475569;
+      line-height: 1.8;
+    }
+    .passion-quote {
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      margin: 14px 0;
+      background: rgba(37,99,235,0.06);
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: #334155;
+    }
+
+    /* Sezione passioni — testo lungo con layout dedicato */
+    .passion-full-section {
+      margin-top: 48px;
+    }
+    .passion-full-section h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 24px;
+    }
+    .passion-block {
+      margin-bottom: 32px;
+    }
+    .passion-block-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+    .passion-block p {
+      font-size: 0.9rem;
+      color: #475569;
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+    .passion-block ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .passion-block ul li {
+      padding-left: 20px;
+      position: relative;
+      font-size: 0.9rem;
+      color: #475569;
+      line-height: 1.7;
+    }
+    .passion-block ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .science-image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 18px 0;
+      align-items: start;
+    }
+    .science-image {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+    }
+    .science-image img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      margin: 0 auto 8px;
+    }
+    .science-image-caption {
+      font-size: 0.85rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    /* ── CONTATTI ─────────────────────────────────────── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .contact-intro h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .contact-intro p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .contact-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .contact-item:hover {
+      border-color: var(--hover);
+      transform: translateX(4px);
+    }
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(37,99,235,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .contact-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .social-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .social-btn:hover {
+      border-color: var(--hover);
+      background: rgba(56,189,248,0.08);
+      color: var(--hover);
+    }
+
+    /* ── FOOTER ───────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    footer a { color: var(--hover); text-decoration: none; }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner   { flex-direction: column-reverse; gap: 32px; text-align: center; }
+      .hero-bio     { margin: 0 auto 40px; }
+      .hero-cta     { justify-content: center; }
+      .hero-stats   { justify-content: center; }
+      .about-grid   { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .nav-links    { display: none; }
+      .nav-burger   { display: flex; }
+    }
+
+    @media (max-width: 600px) {
+      .section   { padding: 64px 0; }
+      .hero-photo { width: 180px; height: 180px; }
+      .hero-stats { gap: 20px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    /* ── REDUCED MOTION ───────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =====================================================
+       NAVBAR
+       Navigazione fissa con link alle sezioni interne.
+       Su mobile si trasforma in menu hamburger.
+       ===================================================== -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">AT<span>.</span></a>
+
+      <!-- Link desktop -->
+      <ul class="nav-links">
+        <li><a href="#about">Chi sono</a></li>
+        <li><a href="#skills">Competenze</a></li>
+        <li><a href="#experience">Esperienze</a></li>
+        <li><a href="#education">Formazione</a></li>
+        <li><a href="#certifications">Certificazioni</a></li>
+        <li><a href="#badges">Badge</a></li>
+        <li><a href="#passions">Passioni</a></li>
+        <li><a href="#contact">Contatti</a></li>
+      </ul>
+
+      <!-- Hamburger mobile -->
+      <button class="nav-burger" id="burgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu overlay -->
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="#about"          onclick="closeMobile()">Chi sono</a>
+    <a href="#skills"         onclick="closeMobile()">Competenze</a>
+    <a href="#experience"     onclick="closeMobile()">Esperienze</a>
+    <a href="#education"      onclick="closeMobile()">Formazione</a>
+    <a href="#certifications" onclick="closeMobile()">Certificazioni</a>
+    <a href="#badges"         onclick="closeMobile()">Badge</a>
+    <a href="#passions"       onclick="closeMobile()">Passioni</a>
+    <a href="#contact"        onclick="closeMobile()">Contatti</a>
+  </div>
+
+
+  <!-- =====================================================
+       HERO SECTION
+       ===================================================== -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+
+        <!-- Testo principale -->
+        <div class="hero-text">
+          <div class="hero-eyebrow">Portfolio</div>
+
+          <h1 class="hero-name">
+            Antonio<br><span class="surname">Tagarelli</span>
+          </h1>
+
+          <p class="hero-role">
+            Perito Tecnico delle Telecomunicazioni
+          </p>
+
+          
+
+          <div class="hero-cta">
+            <a href="#contact" class="btn-primary">
+              <!-- icona mail -->
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+              Contattami
+            </a>
+            <a href="#certifications" class="btn-outline">
+              <!-- icona certificato -->
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15l-2 5-1-1-2 1 2-5"/><path d="M17 15l2 5 1-1 2 1-2-5"/><circle cx="12" cy="10" r="5"/></svg>
+              Vedi certificazioni
+            </a>
+          </div>
+
+          <!-- Mini statistiche -->
+          <div class="hero-stats">
+            <div>
+              <div class="hero-stat-value">100</div>
+              <div class="hero-stat-label">Voto maturità</div>
+            </div>
+            <div>
+              <div class="hero-stat-value">9</div>
+              <div class="hero-stat-label">Certificazioni Cisco</div>
+            </div>
+            <div>
+              <div class="hero-stat-value">1</div>
+              <div class="hero-stat-label">Badge Credly</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Foto profilo -->
+        <div class="hero-photo">
+          <div class="hero-photo-img">
+            <img src="immagini/Fototessera_definitiva.png" alt="Antonio Tagarelli" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       CHI SONO
+       ===================================================== -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Presentazione</span>
+        <h2 class="section-title">Chi sono</h2>
+        <p class="section-sub">Una breve panoramica su di me, le mie competenze e i miei obiettivi professionali.</p>
+      </div>
+
+      <div class="about-grid reveal">
+        <!-- Bio testuale -->
+        <div class="about-text">
+          <p>
+            Mi chiamo Antonio e sono un Perito Tecnico delle Telecomunicazioni diplomato con il massimo dei voti
+            presso l'IISS G. Marconi di Bari. Sono appassionato di reti, domotica e IoT, e cerco opportunità
+            per trasformare le mie competenze in soluzioni innovative.
+          </p>
+          <p>
+            Durante il mio percorso di studi ho acquisito competenze solide in progettazione di reti, elettronica,
+            programmazione e sistemi domotici. Ho avuto modo di applicarle concretamente durante il PCTO presso
+            l'Aeronautica Militare — 2° Reparto Tecnico Comunicazioni di Bari Palese.
+          </p>
+          <p>
+            Ho una forte propensione all'apprendimento continuo e alla crescita personale, caratteristiche
+            che considero fondamentali anche in ambito professionale.
+          </p>
+        </div>
+
+        <!-- Informazioni di contatto rapido -->
+        <div>
+          <ul class="about-info-list">
+            <li>
+              <span class="info-label">📍 Città</span>
+              <span class="info-value">Torre a Mare, Bari, Puglia, Italia</span>
+            </li>
+            <li>
+              <span class="info-label">📧 Email</span>
+              <a href="mailto:antonio.tagarelli.05@gmail.com" class="info-value" style="color:var(--hover)">
+                antonio.tagarelli.05@gmail.com
+              </a>
+            </li>
+            <li>
+              <span class="info-label">📱 Tel.</span>
+              <a href="tel:+393454023731" class="info-value" style="color:var(--hover)">
+                +39 345 4023731
+              </a>
+            </li>
+            <li>
+              <span class="info-label">🎓 Diploma</span>
+              <span class="info-value">IISS G. Marconi, Bari — 100/100</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       COMPETENZE TECNICHE
+       ===================================================== -->
+  <section id="skills" class="section section-light">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Hard Skills</span>
+        <h2 class="section-title">Competenze tecniche</h2>
+        <p class="section-sub">Le tecnologie e gli strumenti che utilizzo nella progettazione e nello sviluppo.</p>
+      </div>
+
+      <div class="grid-2 reveal">
+
+        <!-- Reti & Telecomunicazioni -->
+        <div class="card skill-category">
+          <p class="skill-cat-title">🌐 Reti & Telecomunicazioni</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Reti domestiche & aziendali</span>
+            <span class="skill-tag">Cablaggio strutturato</span>
+            <span class="skill-tag">Cisco Packet Tracer</span>
+            <span class="skill-tag">CCNA</span>
+            <span class="skill-tag">TCP/IP</span>
+            <span class="skill-tag">IoT</span>
+          </div>
+        </div>
+
+        <!-- Domotica & Sistemi -->
+        <div class="card skill-category">
+          <p class="skill-cat-title">🏠 Domotica & Sistemi</p>
+          <div class="skill-tags">
+            <span class="skill-tag">CAME (sistemi domotici)</span>
+            <span class="skill-tag">Raspberry Pi</span>
+            <span class="skill-tag">Arduino</span>
+            <span class="skill-tag">Tinkercad</span>
+            <span class="skill-tag">Automazione</span>
+          </div>
+        </div>
+
+        <!-- Programmazione -->
+        <div class="card skill-category">
+          <p class="skill-cat-title">💻 Programmazione</p>
+          <div class="skill-tags">
+            <span class="skill-tag">C++</span>
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">HTML</span>
+            <span class="skill-tag">CSS</span>
+            <span class="skill-tag">MIT App Inventor</span>
+            <span class="skill-tag">Programmazione a blocchi</span>
+          </div>
+        </div>
+
+        <!-- Elettronica & Hardware -->
+        <div class="card skill-category">
+          <p class="skill-cat-title">⚡ Elettronica & Hardware</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Multisim</span>
+            <span class="skill-tag">Circuiti elettronici</span>
+            <span class="skill-tag">Sensori & attuatori</span>
+          </div>
+        </div>
+
+        <!-- Cybersecurity -->
+        <div class="card skill-category">
+          <p class="skill-cat-title">🔐 Cybersecurity</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Fondamenti di Cybersecurity</span>
+            <span class="skill-tag">Sicurezza delle reti</span>
+            <span class="skill-tag">Cisco CyberOps</span>
+          </div>
+        </div>
+
+        <!-- Soft Skills -->
+        <div class="card skill-category">
+          <p class="skill-cat-title">🧠 Soft Skills</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Problem solving</span>
+            <span class="skill-tag">Lavoro in team</span>
+            <span class="skill-tag">Apprendimento continuo</span>
+            <span class="skill-tag">Resilienza</span>
+            <span class="skill-tag">Autodisciplina</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       ESPERIENZE LAVORATIVE (Timeline)
+       ===================================================== -->
+  <section id="experience" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Carriera</span>
+        <h2 class="section-title">Esperienze</h2>
+        <p class="section-sub">Il percorso pratico che ha arricchito la mia formazione tecnica.</p>
+      </div>
+
+      <div class="timeline reveal">
+
+        <!-- PCTO Aeronautica Militare -->
+        <div class="timeline-item">
+          <div class="timeline-date">08 Aprile 2024 – 12 Aprile 2024</div>
+          <div class="timeline-title">PCTO — Percorso per le Competenze Trasversali e l'Orientamento</div>
+          <div class="timeline-sub">
+            Aeronautica Militare · 2° Reparto Tecnico Comunicazioni · Bari, Palese
+          </div>
+          <p class="timeline-desc">
+            Esperienza di una settimana presso il 2° Reparto Tecnico Comunicazioni dell'Aeronautica Militare di Bari Palese.
+            Ho avuto modo di osservare e partecipare alle attività legate ai sistemi di comunicazione e telecomunicazioni
+            in contesto operativo militare, approfondendo le dinamiche di coordinamento, la gestione di sistemi complessi
+            e l'applicazione pratica delle competenze acquisite durante il percorso di studi.
+          </p>
+          <div style="margin-top:10px">
+            <span class="pill">Telecomunicazioni</span>
+            <span class="pill" style="margin-left:6px">Sistemi di comunicazione</span>
+          </div>
+        </div>
+
+        <!--
+          AGGIUNGI QUI FUTURE ESPERIENZE:
+          <div class="timeline-item">
+            <div class="timeline-date">MM/YYYY – MM/YYYY</div>
+            <div class="timeline-title">TITOLO RUOLO</div>
+            <div class="timeline-sub">Azienda · Città</div>
+            <p class="timeline-desc">Descrizione...</p>
+          </div>
+        -->
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       FORMAZIONE
+       ===================================================== -->
+  <section id="education" class="section section-light">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Istruzione</span>
+        <h2 class="section-title">Formazione</h2>
+        <p class="section-sub">Il percorso accademico e di istruzione che ha costruito le mie competenze.</p>
+      </div>
+
+      <div class="timeline reveal">
+
+        <!-- Maturità tecnica -->
+        <div class="timeline-item">
+          <div class="timeline-date">2019 – 2024</div>
+          <div class="timeline-title">Diploma di Maturità Tecnica — Perito Tecnico delle Telecomunicazioni</div>
+          <div class="timeline-sub">IISS G. Marconi · Bari, Italia</div>
+          <p class="timeline-desc">
+            Percorso quinquennale di istruzione tecnica tecnologica con specializzazione in telecomunicazioni.
+            Conseguimento del diploma con voto finale di <strong>100/100</strong>.
+            Materie principali: sistemi e reti, telecomunicazioni, elettronica, informatica e matematica.
+          </p>
+          <div style="margin-top:10px">
+            <span class="pill" style="color:var(--accent); border-color:rgba(37,99,235,0.3)">🏆 100/100</span>
+          </div>
+        </div>
+
+        <!--
+          AGGIUNGI QUI EVENTUALI CORSI UNIVERSITARI O POST-DIPLOMA:
+          <div class="timeline-item">
+            <div class="timeline-date">ANNO – ANNO</div>
+            <div class="timeline-title">CORSO/LAUREA</div>
+            <div class="timeline-sub">Università · Città</div>
+            <p class="timeline-desc">Descrizione...</p>
+          </div>
+        -->
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       CERTIFICAZIONI
+       ===================================================== -->
+  <section id="certifications" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Credenziali</span>
+        <h2 class="section-title">Certificazioni & Attestati</h2>
+        <p class="section-sub">Certificazioni ufficiali conseguite nel corso degli anni di formazione.</p>
+      </div>
+
+      <!-- Certificazioni Cisco -->
+      <div style="margin-bottom:48px">
+        <p class="skill-cat-title" style="color:var(--hover); margin-bottom:24px">🔵 Cisco Networking Academy</p>
+        <div class="grid-2 reveal">
+
+          <div class="card cert-card">
+            <div class="cert-icon">📡</div>
+            <div class="cert-body">
+              <div class="cert-name"><a href="pages/certificato_get_conected.html">Get Connected</a></div>
+              <div class="cert-issuer">Cisco Networking Academy</div>
+              <div class="cert-date">23 Aprile 2020</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">🔐</div>
+            <div class="cert-body">
+              <div class="cert-name"><a href="pages/certificato_Introduction_to_Cybersecurity.html">Introduction to Cybersecurity</a></div>
+              <div class="cert-issuer">Cisco Networking Academy</div>
+              <div class="cert-date">12 Settembre 2022</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">🔗</div>
+            <div class="cert-body">
+              <div class="cert-name"><a href="pages/certificato_CCNAv7_Introduzione_alle_Reti.html">CCNAv7 - Introduzione alle Reti</a></div>
+              <div class="cert-issuer">Cisco Networking Academy</div>
+              <div class="cert-date">28 Maggio 2024</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">🌍</div>
+            <div class="cert-body">
+              <div class="cert-name"><a href="pages/certificato_Introduction_to_IoT_and_Digital_Transformation.html">Introduction to IoT and Digital Transformation</a></div>
+              <div class="cert-issuer">Cisco Networking Academy</div>
+              <div class="cert-date">04 Feb 2026</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">💻</div>
+            <div class="cert-body">
+              <div class="cert-name"><a href="pages/certificato_IT_Essentials.html">IT Essentials</a></div>
+              <div class="cert-issuer">Cisco Networking Academy</div>
+              <div class="cert-date">04 Feb 2026</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">🖥️</div>
+            <div class="cert-body">
+              <div class="cert-name"><a href="pages/certificato_Getting_Started_with_Cisco_Packet_Tracer.html">Getting Started with Cisco Packet Tracer</a></div>
+              <div class="cert-issuer">Cisco Networking Academy</div>
+              <div class="cert-date">29 Apr 2026</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">🖧</div>
+            <div class="cert-body">
+              <div class="cert-name"><a href="pages/certificato_Exploring_Networking_with_Cisco_Packet_Tracer.html">Exploring Networking with Cisco Packet Tracer</a></div>
+              <div class="cert-issuer">Cisco Networking Academy</div>
+              <div class="cert-date">30 Apr 2026</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">📘</div>
+            <div class="cert-body">
+              <div class="cert-name"><a href="pages/certificato_Exploring_Internet_of_Things_with_Cisco_Packet_Tracer.html">Exploring Internet of Things with Cisco Packet Tracer</a></div>
+              <div class="cert-issuer">Cisco Networking Academy</div>
+              <div class="cert-date">30 Apr 2026</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">📙</div>
+            <div class="cert-body">
+              <div class="cert-name"><a href="pages/certificato_Introduction_to_Packet_Tracer.html">Introduction to Packet Tracer</a></div>
+              <div class="cert-issuer">Cisco Networking Academy</div>
+              <div class="cert-date">30 Apr 2026</div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <!-- Attestati PON / Altri -->
+      <div>
+        <p class="skill-cat-title" style="color:var(--hover); margin-bottom:24px">📜 Attestati & Programmi</p>
+        <div class="grid-2 reveal">
+
+          <div class="card cert-card">
+            <div class="cert-icon">📚</div>
+            <div class="cert-body">
+              <div class="cert-name">CAME E-Learning</div>
+              <div class="cert-issuer">CAME Group</div>
+              <div class="cert-date">28/04/2022</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">🏠</div>
+            <div class="cert-body">
+              <div class="cert-name">Attestato PON Laboratorio di Domotica</div>
+              <div class="cert-issuer">PON — Programma Operativo Nazionale</div>
+              <div class="cert-date">06/05/2022</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">🚉</div>
+            <div class="cert-body">
+              <div class="cert-name">Attestato Digitale RFI</div>
+              <div class="cert-issuer">Rete Ferroviaria Italiana</div>
+              <div class="cert-date">29/11/2022</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">💡</div>
+            <div class="cert-body">
+              <div class="cert-name">Attestato Digitale Facciamo Luce</div>
+              <div class="cert-issuer">Progetto PCTO</div>
+              <div class="cert-date">30/03/2023</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">🛡️</div>
+            <div class="cert-body">
+              <div class="cert-name">Certificazione Sicurezza sul Lavoro - Rischio Alto</div>
+              <div class="cert-issuer">IISS G. Marconi / Ente Formativo</div>
+              <div class="cert-date">17/03/2022 – 19/03/2024</div>
+            </div>
+          </div>
+
+          <div class="card cert-card">
+            <div class="cert-icon">✈️</div>
+            <div class="cert-body">
+              <div class="cert-name">Attestato Aeronautica Militare - 2° RTC</div>
+              <div class="cert-issuer">Aeronautica Militare · 2° Reparto Tecnico Comunicazioni</div>
+              <div class="cert-date">18 luglio 2024</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       BADGE (Credly e altri)
+       ===================================================== -->
+  <section id="badges" class="section section-light">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Achievements</span>
+        <h2 class="section-title">Badge digitali</h2>
+        <p class="section-sub">Badge verificabili ottenuti su piattaforme ufficiali di certificazione.</p>
+      </div>
+
+      <div class="grid-3 reveal">
+
+        <!--
+          BADGE CREDLY
+          Il badge punta direttamente all'URL pubblico di Credly.
+          Per mostrare l'immagine del badge, puoi:
+          1. Usare l'embed di Credly (vedi URL sotto)
+          2. Incollare direttamente l'URL dell'immagine PNG del badge
+             (visibile nella pagina Credly → tasto destro sull'immagine → copia URL)
+        -->
+        <div class="card badge-card">
+          <div class="badge-img-wrap">
+            <!--
+              SOSTITUISCI con l'URL diretto dell'immagine PNG del badge da Credly.
+              Esempio: <img src="https://images.credly.com/images/.../image.png" alt="Badge" />
+            -->
+            🏅
+          </div>
+          <div class="badge-name">Cisco Badge</div>
+          <div class="badge-platform">Credly · Cisco Networking Academy</div>
+          <a
+            href="https://www.credly.com/badges/678eb0a1-c255-4cfc-9f16-9ae17d3fbbe2/public_url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="badge-link"
+          >
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Verifica su Credly
+          </a>
+        </div>
+
+        <!--
+          AGGIUNGI ALTRI BADGE QUI:
+          <div class="card badge-card">
+            <div class="badge-img-wrap">
+              <img src="URL_IMMAGINE_BADGE" alt="Nome Badge" />
+            </div>
+            <div class="badge-name">Nome Badge</div>
+            <div class="badge-platform">Piattaforma</div>
+            <a href="URL_VERIFICA" target="_blank" class="badge-link">Verifica</a>
+          </div>
+        -->
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       PASSIONI E INTERESSI
+       TESTO IMMODIFICABILE — riportato esattamente come da brief
+       ===================================================== -->
+  <section id="passions" class="section section-light">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Oltre il lavoro</span>
+        <h2 class="section-title">Passioni e interessi</h2>
+        <p class="section-sub">Nel tempo libero coltivo interessi che mi permettono di sviluppare curiosità, disciplina e una mentalità orientata all'apprendimento continuo.</p>
+      </div>
+
+      <!-- Cards di anteprima -->
+      <div class="grid-3 reveal" style="margin-bottom:56px">
+
+        <div class="card passion-card">
+          <div class="passion-emoji">🏀</div>
+          <h3>Sport & Crescita personale</h3>
+          <p>Il basket come scuola di disciplina e lavoro di squadra, affiancato da una mentalità ispirata a David Goggins e alla filosofia del miglioramento continuo.</p>
+        </div>
+
+        <div class="card passion-card">
+          <div class="passion-emoji">📚</div>
+          <h3>Lettura & Apprendimento</h3>
+          <p>Libri, manga e novel su strategia, leadership, psicologia e innovazione. Opere che stimolano il pensiero critico e la visione dei problemi da prospettive differenti.</p>
+        </div>
+
+        <div class="card passion-card">
+          <div class="passion-emoji">🎬</div>
+          <h3>Cinema, serie & Animazione</h3>
+          <p>Fantascienza e fantasy come Dr. Stone, Code Geass, 86 Eighty-Six, Attack on Titan e The Flash — per scienza, tecnologia, strategia e sistemi complessi.</p>
+        </div>
+
+      </div>
+
+      <!-- ===================================================
+           TESTO COMPLETO IMMODIFICABILE
+           NON modificare il testo qui sotto.
+           ============================================== -->
+      <div class="passion-full-section reveal">
+
+        <!-- SPORT E CRESCITA PERSONALE -->
+        <div class="passion-block">
+          <div class="passion-block-title">
+            <span>🏀</span> Sport e crescita personale
+          </div>
+          <p>
+            Pratico e seguo il basket, uno sport che mi ha aiutato a sviluppare disciplina, spirito di squadra, costanza e
+            capacità di gestione della pressione nei momenti decisionali. Lo considero un contesto utile per allenare
+            competenze trasversali applicabili anche in ambito professionale, come la collaborazione e la resilienza.
+          </p>
+          <p>
+            Accanto allo sport, nutro un forte interesse per la crescita personale e la mentalità orientata al miglioramento
+            continuo. In particolare, il libro "Can't Hurt Me" di David Goggins ha avuto un forte impatto sul mio modo di
+            affrontare le difficoltà, trasmettendomi valori come autodisciplina, perseveranza e responsabilità personale.
+          </p>
+          <p>
+            L'approccio dell'autore, ex Navy SEAL e atleta di endurance, enfatizza il superamento dei limiti mentali e la
+            capacità di affrontare le difficoltà con costanza e determinazione. In questo contesto, una delle frasi che meglio
+            rappresenta questa mentalità è:
+          </p>
+          <div class="passion-quote">
+            "When your mind tells you you're done, you're only at 40%"
+          </div>
+          <p>
+            che sintetizza l'idea che il margine di resistenza e crescita sia spesso molto superiore a quello percepito.
+          </p>
+          <p>
+            Altre espressioni che riassumono questa filosofia sono "I don't stop when I'm tired. I stop when I'm done" e
+            "Stay hard", che richiamano una mentalità basata sulla continuità, la resilienza e il miglioramento costante.
+          </p>
+          <p>
+            Nel complesso, queste esperienze hanno contribuito a sviluppare un atteggiamento mentale orientato alla crescita,
+            alla disciplina e al miglioramento progressivo, che considero fondamentali anche in ambito professionale.
+          </p>
+        </div>
+
+        <!-- LETTURA E APPRENDIMENTO -->
+        <div class="passion-block">
+          <div class="passion-block-title">
+            <span>📚</span> Lettura e apprendimento continuo
+          </div>
+          <p>
+            Mi piace leggere libri, manga e novel che affrontano temi legati alla strategia, alla leadership, alla psicologia
+            e all'innovazione. Apprezzo particolarmente opere che stimolano il pensiero critico e la capacità di osservare i
+            problemi da prospettive differenti.
+          </p>
+        </div>
+
+        <!-- CINEMA, SERIE TV E OPERE DI ANIMAZIONE -->
+        <div class="passion-block">
+          <div class="passion-block-title">
+            <span>🎬</span> Cinema, serie TV e opere di animazione
+          </div>
+          <p>
+            Nel tempo libero seguo film, serie TV e opere di animazione, in
+            particolare di fantascienza e fantasy, che affrontano temi legati
+            alla scienza, alla tecnologia, alla strategia, alla leadership e ai
+            sistemi complessi. Al di là dell'aspetto narrativo, apprezzo le
+            opere che stimolano la curiosità e favoriscono una mentalità
+            orientata all'analisi, alla risoluzione dei problemi e
+            all'apprendimento continuo.
+          </p>
+          <p>Tra quelle che ho maggiormente apprezzato:</p>
+          <ul>
+            <li>
+              <strong>Dr. Stone</strong>, per
+              l'approccio fortemente basato sul metodo scientifico e
+              sull'ingegneria. L'opera valorizza osservazione, sperimentazione e
+              miglioramento continuo, affrontando temi che spaziano dalla chimica
+              all'elettrotecnica, dalle telecomunicazioni alla meccanica e
+              all'automazione.
+            </li>
+            <li>
+              <strong>Code Geass</strong>, per
+              gli aspetti legati alla strategia, alla leadership e alla gestione
+              di situazioni complesse. Ho trovato particolarmente interessanti le
+              dinamiche decisionali, il coordinamento delle risorse e i concetti
+              di integrazione tra software, hardware e sistemi meccatronici.
+            </li>
+            <li>
+              <strong>86 Eighty-Six</strong>,
+              per l'attenzione dedicata alle comunicazioni, ai sistemi autonomi,
+              al coordinamento tra unità e all'impiego di tecnologie avanzate.
+              Molti elementi richiamano i moderni sistemi di comando e controllo e
+              sottolineano l'importanza della cooperazione e della leadership
+              sotto pressione.
+            </li>
+            <li>
+              <strong>Attack on Titan</strong>,
+              per la rappresentazione delle dinamiche organizzative, della
+              gestione delle crisi e della pianificazione strategica. L'opera
+              approfondisce inoltre aspetti psicologici e decisionali legati alla
+              responsabilità e al lavoro di squadra.
+            </li>
+            <li>
+              <strong>The 100</strong>, che ha
+              alimentato il mio interesse verso l'ingegneria dei sistemi, la
+              gestione delle risorse, la cooperazione e gli ambienti complessi,
+              introducendo anche tematiche legate alle stazioni spaziali e ai
+              sistemi chiusi.
+            </li>
+            <li>
+              <strong>The Flash</strong>, per i
+              numerosi riferimenti alla fisica moderna e alla cosmologia. Pur
+              trattandosi di una rappresentazione in parte speculativa, la serie
+              ha contribuito ad accrescere la mia curiosità verso argomenti quali
+              acceleratori di particelle, materia oscura e antimateria. In
+              particolare, mi ha spinto ad approfondire le attività del CERN di
+              Ginevra e del Large Hadron Collider (LHC), il più grande
+              acceleratore di particelle al mondo, utilizzato per studiare le
+              proprietà fondamentali della materia e comprendere fenomeni ancora
+              oggi oggetto di ricerca, come la natura della materia oscura e
+              l'asimmetria tra materia e antimateria.
+            </li>
+            <li>
+              <strong>Oppenheimer</strong>, per la ricostruzione storica e
+              scientifica dello sviluppo della fisica nucleare e del Progetto
+              Manhattan. Il film mi ha permesso di approfondire il contributo
+              della ricerca fondamentale al progresso tecnologico e di riflettere
+              sul rapporto tra innovazione scientifica, responsabilità etica e
+              impatto delle tecnologie avanzate sulla società.
+            </li>
+          </ul>
+          <p style="margin-top:16px">
+            Ritengo che questi interessi riflettano la mia naturale curiosità
+            verso la scienza, la tecnologia e i sistemi complessi, oltre a una
+            forte propensione all'apprendimento continuo e all'approfondimento di
+            tematiche interdisciplinari, caratteristiche che considero importanti
+            anche in ambito professionale.
+          </p>
+        </div>
+
+        <div class="passion-block">
+          <div class="passion-block-title">
+            <span>🔬</span> Ricerca scientifica, fisica delle particelle ed energia da fusione
+          </div>
+          <p>
+            Parallelamente agli interessi cinematografici, seguo con
+            particolare curiosità gli sviluppi della ricerca scientifica
+            internazionale nei settori della fisica delle particelle, delle
+            tecnologie avanzate e dell'energia da fusione.
+          </p>
+          <p>
+            Nutro un forte interesse per le attività del <strong>CERN di
+            Ginevra</strong>, centro di eccellenza mondiale nella ricerca
+            fondamentale, e per il <strong>Large Hadron Collider (LHC)</strong>,
+            il più grande acceleratore di particelle mai realizzato. Mi
+            affascinano in particolare gli studi sulla materia oscura e
+            sull'antimateria, temi che rappresentano alcune delle principali
+            sfide della fisica contemporanea.
+          </p>
+
+          <p>
+            Trovo particolarmente interessante come le competenze sviluppate dal
+            CERN nel campo dei magneti superconduttori, dei materiali avanzati e
+            delle tecnologie criogeniche vengano infatti condivise con grandi
+            progetti internazionali, tra cui <strong>ITER (International
+            Thermonuclear Experimental Reactor)</strong>, il più importante
+            programma mondiale dedicato alla fusione nucleare controllata.
+          </p>
+
+          <div class="science-image-grid">
+            <div class="science-image">
+              <img src="immagini/acceleratore_di_particelle.png" alt="Acceleratore di particelle" />
+              <div class="science-image-caption">Acceleratore di particelle Large Hadron Collider (LHC)</div>
+            </div>
+
+          <div class="science-image">
+              <img src="immagini/Tokamak.png" alt="Tokamak" />
+              <div class="science-image-caption">Reattore Tokamak</div>
+            </div>
+          </div>
+
+          <p>
+            Seguire l'evoluzione di ITER, attualmente in costruzione a
+            Cadarache in Francia, ha ulteriormente rafforzato il mio interesse
+            verso i sistemi complessi, la superconduttività, la fisica dei plasmi e
+            le tecnologie necessarie per riprodurre sulla Terra i processi che
+            alimentano il Sole. Trovo particolarmente stimolante la collaborazione
+            internazionale che coinvolge Europa, Stati Uniti, Giappone, India,
+            Cina, Corea del Sud e altri partner, esempio concreto di come la
+            ricerca scientifica e l'ingegneria possano contribuire allo sviluppo
+            di tecnologie sostenibili per il futuro.
+          </p>
+          <p>
+            Più in generale, considero la ricerca scientifica e le grandi
+            infrastrutture tecnologiche un'importante fonte di ispirazione, poiché
+            dimostrano come la collaborazione interdisciplinare, l'innovazione e la
+            continua ricerca di nuove soluzioni siano elementi fondamentali per
+            affrontare le sfide tecnologiche del futuro.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       CONTATTI
+       ===================================================== -->
+  <section id="contact" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Get in touch</span>
+        <h2 class="section-title">Contatti</h2>
+      </div>
+
+      <div class="contact-grid reveal">
+
+        <div class="contact-intro">
+          <h2>Parliamo.</h2>
+          <p>
+            Sono disponibile per opportunità lavorative, stage, collaborazioni e qualsiasi domanda
+            riguardante il mio percorso. Non esitare a contattarmi.
+          </p>
+
+        </div>
+
+        <div class="contact-items">
+          <a href="mailto:antonio.tagarelli.05@gmail.com" class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div>
+              <div class="contact-label">Email</div>
+              <div class="contact-value">antonio.tagarelli.05@gmail.com</div>
+            </div>
+          </a>
+          <a href="tel:+393454023731" class="contact-item">
+            <div class="contact-icon">📱</div>
+            <div>
+              <div class="contact-label">Telefono</div>
+              <div class="contact-value">+39 345 4023731</div>
+            </div>
+          </a>
+          <div class="contact-item" style="cursor:default">
+            <div class="contact-icon">📍</div>
+            <div>
+              <div class="contact-label">Posizione</div>
+              <div class="contact-value">Torre a Mare, Bari, Puglia, Italia</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+  <footer>
+    <p>© 2026 Antonio Tagarelli</p>
+    <p style="margin-top:6px; font-size:0.75rem">
+      Autorizzo il trattamento dei dati personali ai sensi del D.Lgs. 2018/101 e del GDPR (Reg. UE 2016/678)
+    </p>
+  </footer>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+       - Hamburger menu mobile
+       - Scroll reveal animation
+       - Navbar opacity on scroll
+       ===================================================== -->
+  <script>
+    // ── HAMBURGER MENU ──────────────────────────────────
+    const burgerBtn   = document.getElementById('burgerBtn');
+    const mobileMenu  = document.getElementById('mobileMenu');
+
+    burgerBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+    });
+
+    function closeMobile() {
+      mobileMenu.classList.remove('open');
+    }
+
+    // ── SCROLL REVEAL ────────────────────────────────────
+    // Ogni elemento con classe .reveal diventa visibile
+    // quando entra nel viewport
+    const revealEls = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Una volta visibile non serve più osservarlo
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // ── STAGGER sugli elementi figli delle griglie ───────
+    // Aggiunge un ritardo crescente agli elementi di ogni griglia
+    document.querySelectorAll('.grid-2, .grid-3').forEach(grid => {
+      [...grid.children].forEach((child, i) => {
+        child.style.transitionDelay = `${i * 0.1}s`;
+        child.classList.add('reveal');
+        revealObserver.observe(child);
+      });
+    });
+
+    // ── NAVBAR SCROLL ────────────────────────────────────
+    // Aggiunge un bordo più visibile alla navbar quando si scrolla
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 20) {
+        navbar.style.background = 'rgba(15,23,42,0.97)';
+      } else {
+        navbar.style.background = 'rgba(15,23,42,0.85)';
+      }
+    });
+
+    // ── ACTIVE NAV LINK ──────────────────────────────────
+    // Evidenzia il link della sezione corrente nella navbar
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks  = document.querySelectorAll('.nav-links a');
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.style.color = '';
+            if (link.getAttribute('href') === '#' + entry.target.id) {
+              link.style.color = 'var(--hover)';
+            }
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+
+    sections.forEach(s => sectionObserver.observe(s));
+  </script>
+
+</body>
+</html>
